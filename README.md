@@ -1,6 +1,6 @@
 # OWorker ACLIP
 
-OWorker ACLIP 是 Agent Command Line Interface Protocol 的 OWorker 维护版。它保留 Rendo `aclip` 的协议、schema、Python SDK、TypeScript SDK、示例 CLI 和测试语义，并把开源入口迁移到 OWorker 生态。
+OWorker ACLIP 是 Agent Command Line Interface Protocol 的 OWorker 官方实现，包含协议 schema、Python SDK、TypeScript SDK、示例 CLI 和中文优先文档包。
 
 ACLIP 的目标：让普通 CLI 继续像普通 CLI 一样被人使用，同时让 Agent 能稳定读取命令结构、参数、认证需求、帮助文本、错误结果、诊断入口和可导出的 Skill 包。
 
@@ -104,7 +104,6 @@ void runCli(app);
 维护者文档：
 
 - `docs/internal`
-- `legacy/rendo-docs`
 
 APCC 文档站：
 
@@ -118,7 +117,6 @@ apcc site start --port 4318
 - `sdk/python/`: Python Click 参考适配器、测试、示例、打包脚本。
 - `sdk/typescript/`: TypeScript Commander 参考适配器、测试、示例、打包脚本。
 - `docs/`: 中文优先文档包。
-- `legacy/rendo-docs/`: Rendo 原始归档文档，保留历史设计判断。
 
 ## 本地验证
 

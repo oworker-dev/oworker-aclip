@@ -2,11 +2,10 @@
   "title": "内部",
   "pages": [
     "维护指南",
-    "迁移说明",
+    "项目范围与维护边界",
     "架构与协议边界",
     "conformance 与 schema 维护",
     "发布流程",
-    "PyPI npm GitHub 注册状态",
-    "Rendo 原始文档索引"
+    "PyPI npm GitHub 注册状态"
   ]
 }

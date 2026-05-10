@@ -66,8 +66,7 @@ apcc doctor check
 ## 文档同步规则
 
 - 使用者能直接照抄的内容放 public。
-- 维护判断、迁移背景、发布状态、协议边界放 internal。
-- Rendo 原始文档只放 legacy，不作为当前 public 入口。
+- 维护判断、发布状态、协议边界放 internal。
 - 包 README 要能让 registry 用户完成最小上手，并链接到 GitHub docs。
 
 ## 禁止事项

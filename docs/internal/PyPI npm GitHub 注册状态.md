@@ -43,10 +43,10 @@ cd sdk\python
 python -m twine upload --non-interactive --disable-progress-bar --skip-existing dist\*
 ```
 
-## 不发布的历史 alias
+## 不发布短名 alias
 
 本次不自动发布 PyPI 短名 alias `aclip`。原因：
 
-- 旧 alias 属于 Rendo 历史生态。
-- 自动发布 alias 可能误碰历史包权限和兼容预期。
+- `aclip` 更适合作为代码 import path 和协议命名空间，而不是当前 canonical PyPI 包名。
+- 自动发布短名 alias 可能制造安装入口和权限预期混乱。
 - OWorker canonical 包名是 `oworker-aclip`。

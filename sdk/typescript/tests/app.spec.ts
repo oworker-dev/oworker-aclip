@@ -248,6 +248,76 @@ describe("AclipApp", () => {
     expect(payload).not.toHaveProperty("command");
   });
 
+  test("wraps success output when default json mode is requested", async () => {
+    const app = createApp();
+    const stdout: string[] = [];
+
+    const exitCode = await app.run(
+      ["note", "create", "--title", "hello", "--body", "world", "--json"],
+      {
+        stdout: (text) => stdout.push(text),
+        stderr: () => undefined
+      }
+    );
+
+    expect(exitCode).toBe(0);
+    expect(JSON.parse(stdout.join(""))).toMatchObject({
+      protocol: "aclip/0.1",
+      type: "result",
+      ok: true,
+      command: "note create",
+      data: {
+        note: {
+          title: "hello",
+          body: "world"
+        }
+      }
+    });
+  });
+
+  test("keeps --json author-owned when a command declares it", async () => {
+    const app = new AclipApp({
+      name: "demo",
+      version: "0.1.0",
+      summary: "Demo CLI",
+      description: "Demo CLI for TypeScript SDK tests."
+    });
+    const stdout: string[] = [];
+
+    app.command("status", {
+      summary: "Status",
+      description: "Show status.",
+      arguments: [booleanArgument("json", { flag: "--json", description: "Use command-owned JSON behavior." })],
+      examples: ["demo status --json"],
+      handler: (payload) => payload
+    });
+
+    const exitCode = await app.run(["status", "--json"], {
+      stdout: (text) => stdout.push(text),
+      stderr: () => undefined
+    });
+
+    expect(exitCode).toBe(0);
+    expect(JSON.parse(stdout.join(""))).toEqual({ json: true });
+  });
+
+  test("emits help payload JSON when help uses --json", async () => {
+    const app = createApp();
+    const stdout: string[] = [];
+
+    const exitCode = await app.run(["--help", "--json"], {
+      stdout: (text) => stdout.push(text),
+      stderr: () => undefined
+    });
+
+    expect(exitCode).toBe(0);
+    expect(JSON.parse(stdout.join(""))).toMatchObject({
+      protocol: "aclip/0.1",
+      type: "help_index",
+      command_groups: [{ path: "note", summary: "Manage notes" }]
+    });
+  });
+
   test("returns validation_error envelopes for invalid usage", async () => {
     const app = createApp();
     const stdout: string[] = [];
@@ -454,6 +524,33 @@ describe("AclipApp", () => {
       })
     ).toBe(0);
     expect(stdout.join("")).toBe("demo 0.1.0\n");
+  });
+
+  test("renders root version as JSON when requested", async () => {
+    const app = new AclipApp({
+      name: "demo",
+      version: "0.1.0",
+      summary: "Demo CLI",
+      description: "Demo CLI for TypeScript SDK tests."
+    });
+    const stdout: string[] = [];
+
+    expect(
+      await app.run(["--version", "--json"], {
+        stdout: (text) => stdout.push(text),
+        stderr: () => undefined
+      })
+    ).toBe(0);
+    expect(JSON.parse(stdout.join(""))).toEqual({
+      protocol: "aclip/0.1",
+      type: "result",
+      ok: true,
+      command: "demo",
+      data: {
+        name: "demo",
+        version: "0.1.0"
+      }
+    });
   });
 
   test("returns a validation error for root version flags when version is missing", async () => {

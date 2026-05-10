@@ -41,6 +41,16 @@ def test_root_help_returns_index_manifest():
     )
 
 
+def test_root_help_can_emit_json_payload():
+    result = run_demo("--help", "--json")
+
+    assert result.returncode == 0
+    payload = json.loads(result.stdout)
+    assert payload["protocol"] == "aclip/0.1"
+    assert payload["type"] == "help_index"
+    assert payload["command_groups"] == [{"path": "note", "summary": "Manage notes"}]
+
+
 def test_bare_invocation_matches_help_markdown():
     help_result = run_demo("--help")
     bare_result = run_demo()
@@ -70,6 +80,19 @@ def test_root_version_flags_return_plain_version():
     assert lower_short_flag.stdout == "aclip-demo-notes 0.1.0\n"
 
 
+def test_root_version_can_emit_json_payload():
+    result = run_demo("--version", "--json")
+
+    assert result.returncode == 0
+    assert json.loads(result.stdout) == {
+        "command": "aclip-demo-notes",
+        "data": {"name": "aclip-demo-notes", "version": "0.1.0"},
+        "ok": True,
+        "protocol": "aclip/0.1",
+        "type": "result",
+    }
+
+
 def test_natural_cli_execution_returns_app_defined_success_output(tmp_path):
     store = tmp_path / "notes.json"
 
@@ -90,6 +113,30 @@ def test_natural_cli_execution_returns_app_defined_success_output(tmp_path):
     assert "protocol" not in payload
     assert "ok" not in payload
     assert "command" not in payload
+
+
+def test_json_mode_wraps_success_output(tmp_path):
+    store = tmp_path / "notes.json"
+
+    result = run_demo(
+        "note",
+        "create",
+        "--title",
+        "hello",
+        "--body",
+        "world",
+        "--store",
+        str(store),
+        "--json",
+    )
+
+    assert result.returncode == 0
+    payload = json.loads(result.stdout)
+    assert payload["protocol"] == "aclip/0.1"
+    assert payload["type"] == "result"
+    assert payload["ok"] is True
+    assert payload["command"] == "note create"
+    assert payload["data"]["note"]["title"] == "hello"
 
 
 def test_direct_script_execution_still_works_for_binary_packaging_entrypoint():

@@ -19,7 +19,7 @@ import {
 } from "./contracts.js";
 import { CommanderBackendError, parseCommandArguments } from "./commanderBackend.js";
 import { renderHelpMarkdown } from "./renderMarkdown.js";
-import { encodeJson, errorEnvelope, renderSuccessOutput } from "./runtime.js";
+import { encodeJson, errorEnvelope, renderSuccessOutput, resultEnvelope } from "./runtime.js";
 
 export interface RunIo {
   stdout: (text: string) => void;
@@ -183,8 +183,12 @@ export class AclipApp {
   }
 
   async run(argv: string[] = process.argv.slice(2), io: RunIo = defaultIo()): Promise<number> {
+    const jsonRequest = this.extractProtocolJsonMode(argv);
+    const jsonMode = jsonRequest.enabled;
+    argv = jsonRequest.argv;
+
     if (!argv.length) {
-      io.stdout(renderHelpMarkdown(this.buildHelpPayload(), this.name));
+      io.stdout(jsonMode ? encodeJson(this.buildHelpPayload()) : renderHelpMarkdown(this.buildHelpPayload(), this.name));
       return 0;
     }
 
@@ -192,7 +196,7 @@ export class AclipApp {
       const pathParts = argv.slice(1).filter((token) => !token.startsWith("-"));
       const expandAll = argv.slice(1).includes("--all");
       try {
-        io.stdout(this.renderHelpResponse(pathParts, expandAll));
+        io.stdout(jsonMode ? encodeJson(this.buildHelpPayload(pathParts)) : this.renderHelpResponse(pathParts, expandAll));
         return 0;
       } catch {
         io.stderr(encodeJson(errorEnvelope(pathParts.join(" ") || this.name, "validation_error", "unknown command path for --help")));
@@ -205,7 +209,7 @@ export class AclipApp {
       const pathParts = argv.slice(0, helpFlagIndex).filter((token) => !token.startsWith("-"));
       const expandAll = argv.slice(helpFlagIndex + 1).includes("--all");
       try {
-        io.stdout(this.renderHelpResponse(pathParts, expandAll));
+        io.stdout(jsonMode ? encodeJson(this.buildHelpPayload(pathParts)) : this.renderHelpResponse(pathParts, expandAll));
         return 0;
       } catch {
         io.stderr(encodeJson(errorEnvelope(pathParts.join(" ") || this.name, "validation_error", "unknown command path for --help")));
@@ -219,7 +223,7 @@ export class AclipApp {
         return 2;
       }
       try {
-        io.stdout(this.renderVersionResponse());
+        io.stdout(this.renderVersionResponse(jsonMode));
         return 0;
       } catch (error) {
         const message = error instanceof Error ? error.message : "version is not configured for this CLI";
@@ -239,7 +243,9 @@ export class AclipApp {
 
     try {
       const result = await parsed.command.handler(parsed.payload);
-      const output = renderSuccessOutput(result);
+      const output = jsonMode
+        ? encodeJson(resultEnvelope(parsed.command.path.join(" "), result))
+        : renderSuccessOutput(result);
       if (output) {
         io.stdout(output);
       }
@@ -448,9 +454,12 @@ export class AclipApp {
     return this.version;
   }
 
-  private renderVersionResponse(): string {
+  private renderVersionResponse(jsonMode = false): string {
     if (!this.version?.trim()) {
       throw new Error("version is not configured for this CLI");
+    }
+    if (jsonMode) {
+      return encodeJson(resultEnvelope(this.name, { name: this.name, version: this.version }));
     }
     return `${this.name} ${this.version}\n`;
   }
@@ -495,6 +504,32 @@ export class AclipApp {
       throw new Error("command skill path must contain at least one segment");
     }
     return normalized;
+  }
+
+  private extractProtocolJsonMode(argv: string[]): { enabled: boolean; argv: string[] } {
+    if (!argv.includes("--json")) {
+      return { enabled: false, argv };
+    }
+
+    const command = this.findCommandForArgv(argv);
+    if (command && this.commandDeclaresFlag(command, "--json")) {
+      return { enabled: false, argv };
+    }
+
+    return {
+      enabled: true,
+      argv: argv.filter((token) => token !== "--json")
+    };
+  }
+
+  private findCommandForArgv(argv: string[]): CommandSpec | undefined {
+    return [...this.commands]
+      .sort((left, right) => right.path.length - left.path.length)
+      .find((command) => command.path.every((segment, index) => argv[index] === segment));
+  }
+
+  private commandDeclaresFlag(command: CommandSpec, flag: string): boolean {
+    return command.arguments.some((argument) => resolveFlags(argument).includes(flag));
   }
 }
 

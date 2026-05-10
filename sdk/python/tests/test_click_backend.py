@@ -165,3 +165,32 @@ def test_click_backend_supports_multi_flag_aliases_on_one_argument(capsys):
     detail = app.build_command_detail(["status"])
     assert detail["arguments"][0]["flags"] == ["--version", "-V", "-v"]
 
+
+def test_json_flag_is_author_owned_when_command_declares_it(capsys):
+    app = AclipApp(
+        name="demo",
+        version="0.1.0",
+        summary="Demo CLI",
+        description="Demo CLI for click backend coverage.",
+        commands=[
+            CommandSpec(
+                path=("status",),
+                summary="Status",
+                description="Show status.",
+                arguments=[
+                    ArgumentSpec(
+                        name="json",
+                        kind="boolean",
+                        description="Use command-owned JSON behavior.",
+                        flag="--json",
+                    )
+                ],
+                examples=["demo status --json"],
+                handler=lambda arguments: arguments,
+            )
+        ],
+    )
+
+    assert app.run(["status", "--json"]) == 0
+    assert json.loads(capsys.readouterr().out) == {"json": True}
+

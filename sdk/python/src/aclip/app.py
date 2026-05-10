@@ -18,7 +18,7 @@ from .contracts import (
 )
 from .decorators import CommandGroupBuilder, command_from_callable, command_from_handler
 from .render_markdown import render_help_markdown
-from .runtime import encode_json, error_envelope, render_success_output
+from .runtime import encode_json, error_envelope, render_success_output, result_envelope
 
 ROOT_VERSION_FLAGS = {"--version", "-V", "-v"}
 CLI_TOKEN_PATTERN = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?$")
@@ -173,16 +173,23 @@ class AclipApp:
 
     def run(self, argv: list[str] | None = None) -> int:
         args = list(argv if argv is not None else sys.argv[1:])
+        json_mode, args = self._extract_protocol_json_mode(args)
 
         if not args:
-            print(render_help_markdown(self.build_help_payload(), self.name), end="")
+            if json_mode:
+                print(encode_json(self.build_help_payload()), end="\n")
+            else:
+                print(render_help_markdown(self.build_help_payload(), self.name), end="")
             return 0
 
         if args[0] == "help" and not self._has_root_help_override():
             help_path = [token for token in args[1:] if not token.startswith("-")]
             expand_all = "--all" in args[1:]
             try:
-                print(self._render_help_response(help_path, expand_all=expand_all), end="")
+                if json_mode:
+                    print(encode_json(self.build_help_payload(help_path)), end="\n")
+                else:
+                    print(self._render_help_response(help_path, expand_all=expand_all), end="")
                 return 0
             except KeyError:
                 print(
@@ -205,7 +212,10 @@ class AclipApp:
             help_path = [token for token in args[:help_flag_index] if not token.startswith("-")]
             expand_all = "--all" in args[help_flag_index + 1 :]
             try:
-                print(self._render_help_response(help_path, expand_all=expand_all), end="")
+                if json_mode:
+                    print(encode_json(self.build_help_payload(help_path)), end="\n")
+                else:
+                    print(self._render_help_response(help_path, expand_all=expand_all), end="")
                 return 0
             except KeyError:
                 print(
@@ -234,7 +244,7 @@ class AclipApp:
                 )
                 return 2
             try:
-                sys.stdout.write(self._render_version_response())
+                sys.stdout.write(self._render_version_response(json_mode=json_mode))
                 return 0
             except ValueError as exc:
                 print(
@@ -268,7 +278,10 @@ class AclipApp:
             result = command.handler(payload)
             if inspect.isawaitable(result):
                 result = asyncio.run(result)
-            output = render_success_output(result)
+            if json_mode:
+                output = f"{encode_json(result_envelope(command.command_name(), result))}\n"
+            else:
+                output = render_success_output(result)
         except Exception as exc:  # pragma: no cover - defensive runtime path
             print(
                 encode_json(
@@ -524,10 +537,12 @@ class AclipApp:
             raise ValueError(f"version is required when {context}")
         return self.version
 
-    def _render_version_response(self) -> str:
+    def _render_version_response(self, *, json_mode: bool = False) -> str:
         version = str(self.version).strip() if self.version is not None else ""
         if not version:
             raise ValueError("version is not configured for this CLI")
+        if json_mode:
+            return f"{encode_json(result_envelope(self.name, {'name': self.name, 'version': version}))}\n"
         return f"{self.name} {version}\n"
 
     def _resolve_manifest_name(self, binary_name: str | None) -> str:
@@ -592,3 +607,23 @@ class AclipApp:
         if not normalized:
             raise ValueError("command skill path must contain at least one segment")
         return normalized
+
+    def _extract_protocol_json_mode(self, args: list[str]) -> tuple[bool, list[str]]:
+        if "--json" not in args:
+            return False, args
+
+        command = self._find_command_for_argv(args)
+        if command is not None and self._command_declares_flag(command, "--json"):
+            return False, args
+
+        return True, [token for token in args if token != "--json"]
+
+    def _find_command_for_argv(self, args: list[str]) -> CommandSpec | None:
+        candidates = sorted(self.commands, key=lambda command: len(command.path), reverse=True)
+        for command in candidates:
+            if tuple(args[: len(command.path)]) == command.path:
+                return command
+        return None
+
+    def _command_declares_flag(self, command: CommandSpec, flag: str) -> bool:
+        return any(flag in argument.resolved_flags() for argument in command.arguments)

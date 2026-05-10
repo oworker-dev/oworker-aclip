@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "oworker-aclip"
-version = "0.3.4"
+version = "0.3.5"
 description = "Python reference SDK for the Agent Command Line Interface Protocol"
 readme = "README.md"
 requires-python = ">=3.12"

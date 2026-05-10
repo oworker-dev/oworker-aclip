@@ -280,7 +280,7 @@ describe("build_cli", () => {
   test("export_skills rejects packages without SKILL.md", async () => {
     const app = new AclipApp({
       name: "notes",
-      version: "0.3.4",
+      version: "0.3.5",
       summary: "A minimal notes CLI.",
       description: "Create and inspect notes."
     });

@@ -14,7 +14,7 @@ description: OWorker ACLIP 在开源注册中心的当前发布状态和 blocker
 ## npm
 
 - 包名：`@oworker/aclip`
-- 版本：`0.3.4`
+- 版本：`0.3.5`
 - 状态：已发布并验证
 - 验证命令：
 
@@ -25,16 +25,16 @@ npm view @oworker/aclip version
 干净安装验证已通过：
 
 ```powershell
-npm install @oworker/aclip@0.3.4
+npm install @oworker/aclip@0.3.5
 node --input-type=module -e "import { AclipApp } from '@oworker/aclip'; console.log(Boolean(AclipApp))"
 ```
 
 ## PyPI
 
 - 包名：`oworker-aclip`
-- 目标版本：`0.3.4`
+- 目标版本：`0.3.5`
 - 状态：构建和 `twine check` 已通过，上传被 `upload.pypi.org` 返回 `429 Too Many Requests`
-- 当前处理：APCC blocker 已记录，等待限流解除后重试。
+- 当前处理：等待 PyPI 限流解除后重试。本次 npm 0.3.5 已发布，PyPI 仍未上线。
 
 重试命令：
 

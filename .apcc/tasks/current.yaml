@@ -1,7 +1,7 @@
 items:
   - id: task-4
     name: 发布代码与文档入口
-    summary: 源码、测试、schema、GitHub 与 npm 入口已完成；PyPI oworker-aclip@0.3.4 上传仍被 upload.pypi.org 429 Too Many Requests 阻塞。
+    summary: oworker-aclip 0.3.5 已完成 npm @oworker/aclip 发布并通过干净安装验证；Python 包 oworker-aclip 0.3.5 构建和 twine check 通过，但 PyPI upload.pypi.org 连续返回 429 Too Many Requests，等待限流解除后重试。
     status: blocked
     planRef: oworker-4
     parentTaskId: null

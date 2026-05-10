@@ -68,7 +68,16 @@ def publish() -> None:
     env["PYTHONIOENCODING"] = "utf-8"
     env["PYTHONUTF8"] = "1"
     run(
-        [sys.executable, "-m", "twine", "upload", "--non-interactive", "--skip-existing", *dist_files()],
+        [
+            sys.executable,
+            "-m",
+            "twine",
+            "upload",
+            "--non-interactive",
+            "--disable-progress-bar",
+            "--skip-existing",
+            *dist_files(),
+        ],
         env=env,
     )
 

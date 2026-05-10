@@ -1,0 +1,12 @@
+workspaceSchemaVersion: 10
+apccVersion: 0.3.4
+workspaceName: oworker-aclip
+docsRoot: docs
+workspaceRoot: .apcc
+bootstrapMode: init
+templateVersion: 2026-04-30.runtime-state-and-version-scoping-1
+projectKind: library
+docsMode: standard
+docsLanguage: zh-CN
+createdAt: 2026-05-10T09:38:19.964Z
+lastUpgradedAt: null

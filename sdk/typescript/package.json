@@ -1,0 +1,49 @@
+{
+  "name": "@oworker/aclip",
+  "version": "0.3.4",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://github.com/oworker-dev/oworker-aclip",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oworker-dev/oworker-aclip.git"
+  },
+  "bugs": {
+    "url": "https://github.com/oworker-dev/oworker-aclip/issues"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "schema"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "release:check": "node ./scripts/publish.mjs check",
+    "release:publish": "node ./scripts/publish.mjs publish"
+  },
+  "dependencies": {
+    "commander": "^14.0.3",
+    "typescript": "^6.0.2",
+    "tsup": "^8.5.1",
+    "tsx": "^4.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "ajv": "^8.18.0",
+    "vitest": "^4.1.4"
+  }
+}
+

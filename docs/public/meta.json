@@ -1,0 +1,13 @@
+{
+  "title": "公开",
+  "pages": [
+    "快速开始",
+    "协议核心",
+    "Python SDK 指南",
+    "TypeScript SDK 指南",
+    "打包与发布",
+    "Agent Skill 导出",
+    "认证、诊断与错误",
+    "边界与兼容"
+  ]
+}

@@ -1,0 +1,14 @@
+goalId: end-goal-oworker-aclip
+name: 发布 OWorker ACLIP
+summary: 将 Rendo 归档的 aclip 无损迁移到 OWorker 生态，形成可维护的协议、SDK、文档包和开源发布入口。
+docPath: shared/目标.md
+successCriteria:
+  - Rendo aclip 的源码、schema、测试和原始文档被完整迁移或归档
+  - OWorker 中文优先文档包能让外部使用者安装、编写、打包和诊断 ACLIP CLI
+  - Python SDK 与 TypeScript SDK 的测试、类型检查、构建和发布前检查通过
+  - npm、PyPI 和 GitHub 入口迁移到 OWorker 身份
+nonGoals:
+  - 重命名协议名 aclip
+  - 破坏 Python import path aclip
+  - 自动发布历史 PyPI 短名 alias aclip
+  - 把 live session、浏览器控制、REPL 或多 Agent 编排纳入 ACLIP core

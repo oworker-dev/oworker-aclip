@@ -1,0 +1,10 @@
+siteFramework: fumadocs
+packageManager: npm
+projectKind: library
+docsMode: standard
+docsLanguage: zh-CN
+docsSite:
+  enabled: true
+  sourcePath: docs
+  preferredPort: null
+workspaceSchemaVersion: 10

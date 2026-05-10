@@ -1,0 +1,7 @@
+endGoalRef: end-goal-oworker-aclip
+items:
+  - id: oworker-4
+    name: 完成 OWorker 生态迁移
+    summary: 迁移 Rendo aclip 代码、schema、测试和文档到 OWorker 项目，并发布到开源注册中心。
+    parentPlanId: null
+    versionRef: null

@@ -1,0 +1,3 @@
+name: OWorker ACLIP
+summary: OWorker ACLIP 是面向 Agent 与 CLI 生态的命令行接口协议、schema 和 Python/TypeScript 参考 SDK。
+docPath: shared/概览.md

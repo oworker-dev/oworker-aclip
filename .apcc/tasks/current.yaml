@@ -1,0 +1,8 @@
+items:
+  - id: task-4
+    name: 迁移代码与文档并发布
+    summary: 无损迁移 rendo-archived/aclip 的代码、schema、测试和归档文档，重写中文文档包，完成 npm/PyPI/GitHub 发布。
+    status: in_progress
+    planRef: oworker-4
+    parentTaskId: null
+    countedForProgress: true

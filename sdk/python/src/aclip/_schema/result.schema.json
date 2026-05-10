@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aclip.dev/schema/result.schema.json",
+  "title": "ACLIP Optional Result Envelope Helper",
+  "description": "Deprecated optional helper envelope for SDK-owned success output. ACLIP core no longer requires successful commands to emit this shape.",
+  "type": "object",
+  "required": ["protocol", "type", "ok", "command", "data"],
+  "properties": {
+    "protocol": { "const": "aclip/0.1" },
+    "type": { "const": "result" },
+    "ok": { "const": true },
+    "command": { "type": "string", "minLength": 1 },
+    "data": { "type": "object" }
+  },
+  "additionalProperties": false
+}

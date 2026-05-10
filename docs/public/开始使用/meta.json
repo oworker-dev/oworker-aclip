@@ -1,0 +1,9 @@
+{
+  "title": "开始使用",
+  "pages": [
+    "ACLIP 是什么",
+    "选择 Python 还是 TypeScript",
+    "5分钟写出第一个 CLI",
+    "从 Rendo 包迁移到 OWorker 包"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "title": "TypeScript",
+  "pages": [
+    "安装与导入",
+    "创建 AclipApp",
+    "命令与命令组",
+    "参数类型与默认值",
+    "输出与错误",
+    "认证 auth",
+    "诊断 doctor",
+    "打包 CLI",
+    "导出 Agent Skills",
+    "API 参考"
+  ]
+}

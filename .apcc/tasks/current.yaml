@@ -1,8 +1,15 @@
 items:
   - id: task-4
     name: 迁移代码与文档并发布
-    summary: 无损迁移 rendo-archived/aclip 的代码、schema、测试和归档文档，重写中文文档包，完成 GitHub 与 npm 发布；PyPI oworker-aclip 上传当前被 upload.pypi.org 返回 429 Too Many Requests 限流。
+    summary: 源码、测试、schema、原始文档归档、GitHub 与 npm 入口已完成；PyPI oworker-aclip@0.3.4 上传仍被 upload.pypi.org 429 Too Many Requests 阻塞。
     status: blocked
+    planRef: oworker-4
+    parentTaskId: null
+    countedForProgress: true
+  - id: task-2
+    name: 重构使用者文档包
+    summary: public 文档已重构为中文优先的 Python/TypeScript 多端 SDK 使用者文档包；协议、发布、schema、注册中心状态和原始 Rendo 索引已下沉到 internal。
+    status: done
     planRef: oworker-4
     parentTaskId: null
     countedForProgress: true

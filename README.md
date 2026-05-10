@@ -1,6 +1,8 @@
 # OWorker ACLIP
 
-OWorker ACLIP 是 Agent Command Line Interface Protocol 的 OWorker 官方实现，包含协议 schema、Python SDK、TypeScript SDK、示例 CLI 和中文优先文档包。
+OWorker ACLIP 是 Agent Command Line Interface Protocol 的 OWorker 官方实现，属于 OWorker Open System -> Agent-Native Service Standard (ANSS) 下的 CLI/SDK/协议组件。
+
+OWorker Open System / Agent-Native Service 是由 OWorker 团队维护的开放标准与开源工具体系，不是 OWorker 平台私有技术。OWorker 是维护者、首个核心应用者和核心受益者之一；开发者也可以用 ACLIP 和后续 Agent-Native Service Kit / Suite 构建标准 Agent 原生服务。
 
 ACLIP 的目标：让普通 CLI 继续像普通 CLI 一样被人使用，同时让 Agent 能稳定读取命令结构、参数、认证需求、帮助文本、错误结果、诊断入口和可导出的 Skill 包。
 

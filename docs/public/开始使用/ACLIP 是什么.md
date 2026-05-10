@@ -5,7 +5,11 @@ description: 面向 SDK 使用者解释 ACLIP 的用途、适用场景和基本�
 
 # ACLIP 是什么
 
-ACLIP 是 Agent Command Line Interface Protocol。它不是新的 Shell、不是 MCP，也不是一套强制的命令行框架。它是一组 SDK 和约定，用来把普通 CLI 写成“人能自然使用、Agent 也能稳定理解”的 CLI。
+ACLIP 是 Agent Command Line Interface Protocol。它属于 OWorker Open System -> Agent-Native Service Standard (ANSS)，是 ANSS 下的 CLI/SDK/协议组件。
+
+它不是新的 Shell、不是 MCP，也不是一套强制的命令行框架。它是一组 SDK 和约定，用来把普通 CLI 写成“人能自然使用、Agent 也能稳定理解”的 CLI。
+
+OWorker Open System / Agent-Native Service 是由 OWorker 团队维护的开放标准与开源工具体系，不是 OWorker 平台私有技术。OWorker 是维护者、首个核心应用者和核心受益者之一；外部开发者也可以用 ACLIP 构建标准 Agent 原生服务。
 
 一个 ACLIP CLI 仍然像普通 CLI 一样运行：
 
